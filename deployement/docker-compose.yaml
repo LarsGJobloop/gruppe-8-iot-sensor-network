@@ -1,0 +1,7 @@
+services:
+  static-web-client:
+    build:
+      context: ../applications/static-web-client
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
