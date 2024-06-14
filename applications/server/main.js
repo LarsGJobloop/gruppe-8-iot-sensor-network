@@ -1,4 +1,4 @@
-import { IncomingMessage, createServer } from 'node:http'
+import { ServerResponse, IncomingMessage, createServer } from 'node:http'
 
 const report = {
   reportId: 0,
@@ -6,12 +6,19 @@ const report = {
   temperature: 17,
 }
 
+/**
+ * @param {IncomingMessage} request 
+ * @param {ServerResponse<IncomingMessage> & {
+ *    req: IncomingMessage;
+ * }} response 
+ */
 function getAllReports(request, response) {
   // Convert to network format
   const data = JSON.stringify(report)
 
   // Send the resulting package
-  response.end(data)  
+  response.setHeader("Access-Control-Allow-Origin", '*')
+  response.end(data)
 }
 
 function registerNewMeasurment(request, response) {
