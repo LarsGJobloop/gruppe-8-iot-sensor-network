@@ -1,17 +1,31 @@
-import { createServer } from 'node:http'
+import { IncomingMessage, createServer } from 'node:http'
+
+const report = {
+  reportId: 0,
+  reportDate: new Date().toISOString(),
+  temperature: 17,
+}
 
 function getAllReports(request, response) {
-  response.end("Here are all the reports\n")  
+  // Convert to network format
+  const data = JSON.stringify(report)
+
+  // Send the resulting package
+  response.end(data)  
 }
 
 function registerNewMeasurment(request, response) {
   response.end("Report registered\n")
 }
 
+/**
+ * @param {IncomingMessage} request 
+ */
 function logger(request) {
   const structuredLog = {
     type: "info",
     path: request.url,
+    method: request.method,
     timestamp: new Date().toISOString(),
   }
 
@@ -25,17 +39,23 @@ const server = createServer((request, response) => {
 
   // Routing logic
   const path = request.url
+  const method = request.method
 
-  switch (path) {
-    case "/reports":
-      getAllReports(request, response)
-      break
-    case "/measurements":
-      registerNewMeasurment(request, response)
-      break
-    default:
-      response.end("Resource not found\n")
-      break
+  if (
+    path === "/reports" &&
+    method === "GET"
+  ) {
+    getAllReports(request, response)
+
+  } else if (
+    path === "/measurements" &&
+    method === "POST"
+  ) {
+    registerNewMeasurment(request, response)
+
+  } else {
+    response.writeHead(404)
+    response.end("Resource not found\n")
   }
 })
 
