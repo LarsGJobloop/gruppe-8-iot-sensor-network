@@ -7,3 +7,6 @@ console.log(response)
 console.log(data)
 
 // Bruk dataen til å oppdatere html (Dokumentet DOMet)
+const element = document.getElementById("tempurature")
+console.dir(element)
+element.textContent = data.temperature
