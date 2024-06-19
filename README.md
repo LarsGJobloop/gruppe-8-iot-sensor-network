@@ -29,9 +29,11 @@
   git clone https://github.com/LarsGJobloop/gruppe-8-iot-sensor-network.git
   ```
 
-2. Open the dev container to get the required tooling
-  
+3. Run the project with
 
+  ```sh
+  docker compose --file deployement/docker-compose.yaml up
+  ```
 
 ## Technoogies
 
