@@ -11,7 +11,7 @@ let reportId = 0
  */
 function getAllReports(request, response) {
   // Convert to network format
-  const data = JSON.stringify(report)
+  const data = JSON.stringify(reports)
   
   // Send the resulting package
   response.end(data)
