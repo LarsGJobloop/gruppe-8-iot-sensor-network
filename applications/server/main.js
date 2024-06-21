@@ -1,10 +1,7 @@
 import { ServerResponse, IncomingMessage, createServer } from 'node:http'
 
-const report = {
-  reportId: 0,
-  reportDate: new Date().toISOString(),
-  temperature: 17,
-}
+const reports = []
+let reportId = 0
 
 /**
  * @param {IncomingMessage} request 
@@ -21,7 +18,22 @@ function getAllReports(request, response) {
 }
 
 function registerNewMeasurment(request, response) {
-  response.end("Report registered\n")
+  let data = ""
+
+  request.on("data", (chunk) => {data = data + chunk})
+
+  request.on("end", () => {
+    const obj = JSON.parse(data)
+
+    const newReport = {
+      reportId: reportId++,
+      reportDate: new Date().toISOString(),
+      temperature: obj.temperature,
+    }
+
+    reports.push(newReport)
+    response.end("Report registered\n")
+  })
 }
 
 /**
