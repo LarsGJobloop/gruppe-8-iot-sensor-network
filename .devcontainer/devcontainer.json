@@ -6,7 +6,14 @@
 	"image": "mcr.microsoft.com/devcontainers/javascript-node:1-22-bookworm",
 	"runArgs": [
 		"--network=host"
-	]
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"rangav.vscode-thunder-client"
+			]
+		}
+	}
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
