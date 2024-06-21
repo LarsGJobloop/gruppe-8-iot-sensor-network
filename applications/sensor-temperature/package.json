@@ -1,0 +1,9 @@
+{
+  "name": "sensor-temperature",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
