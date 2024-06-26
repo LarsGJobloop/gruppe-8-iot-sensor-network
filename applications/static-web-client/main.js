@@ -28,7 +28,18 @@ async function getLatestReport() {
 
   const timestampElement = document.getElementById("time")
   timestampElement.textContent = lastWeatherReport.reportDate
+
+  // Legg til nye elementer i tablet vårt
+  console.log(weatherReports)
 }
 
 getLatestReport()
 setInterval(getLatestReport, 5 * 1000)
+
+
+function createNewTableEntry(report) {
+  const newRow = document.createElement("tr")
+
+
+  return newRow
+}
