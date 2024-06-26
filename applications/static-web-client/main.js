@@ -30,7 +30,14 @@ async function getLatestReport() {
   timestampElement.textContent = lastWeatherReport.reportDate
 
   // Legg til nye elementer i tablet vårt
-  console.log(weatherReports)
+  const tableElement = document.getElementById("table-weather-reports")
+  // Fjern all underelemnter (children)
+  tableElement.innerHTML = ""
+
+  for (const report of weatherReports) {
+    const newElement = createNewTableEntry(report)
+    tableElement.append(newElement)
+  }
 }
 
 getLatestReport()
@@ -40,6 +47,13 @@ setInterval(getLatestReport, 5 * 1000)
 function createNewTableEntry(report) {
   const newRow = document.createElement("tr")
 
+  const timeObject = new Date(report.reportDate)
+  const formatedTime = `${timeObject.getHours()}:${timeObject.getMinutes()}:${timeObject.getSeconds()}`
+
+  newRow.innerHTML = `
+    <td>kl <span class="timestamp">${formatedTime}</span></td>
+    <td><span class="temperature">${report.temperature}</span>°C</td>
+  `
 
   return newRow
 }
