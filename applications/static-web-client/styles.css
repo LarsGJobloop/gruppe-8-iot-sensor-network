@@ -1,3 +1,29 @@
 html {
   background-color: rgb(172, 165, 179);
 }
+
+/* Weather Reports */
+.table {
+  border-collapse: collapse;
+  border: 2px solid rgb(174, 252, 251);
+  width: 100%;
+}
+
+.table>thead {
+  border: 1px solid rgb(170, 227, 255);
+  padding: 8px 10px;
+}
+
+.table td {
+  border: 1px solid rgb(170, 227, 255);
+}
+
+.table>tbody {}
+
+.table td {
+  padding: 0.2em;
+}
+
+.table td:last-child {
+  text-align: right;
+}
