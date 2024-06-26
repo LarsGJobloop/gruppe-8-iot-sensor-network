@@ -25,9 +25,9 @@ async function getLatestReport() {
   // Bruk dataen til å oppdatere html (Dokumentet DOMet)
   const temperatureElement = document.getElementById("temperature")
   temperatureElement.textContent = lastWeatherReport.temperature
-  
+
   const timestampElement = document.getElementById("time")
-  timestampElement.textContent = lastWeatherReport.measurementDate
+  timestampElement.textContent = lastWeatherReport.reportDate
 }
 
 getLatestReport()
