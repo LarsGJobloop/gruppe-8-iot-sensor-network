@@ -1,20 +1,38 @@
 import { ServerResponse, IncomingMessage, createServer } from 'node:http'
-import { appendFile, readFile, mkdir, } from 'node:fs/promises'
+import { writeFile, readFile, mkdir, } from 'node:fs/promises'
 
 let reportId = 0
+const reportsPath = "./data/reports.json"
+
+async function setupEnvironment() {
+    // Create files and directories if they don't exists
+    try {
+      await readFile(reportsPath)
+    } catch (error) {
+      // File and/or directory does not exist create them
+      try {
+        await mkdir("./data")
+      } catch (error) {
+        console.log("Folder existed")
+      }
+  
+      await writeFile(reportsPath, JSON.stringify([]))
+    }
+}
 
 // IO (InputOutput) Function
 const reports = []
 async function appendReport(newReport) {
-  const reportString = JSON.stringify(newReport)
-  try {
-    console.log("Trying to write to file")
-    await appendFile("./data/reports.txt", reportString, { encoding: "utf-8" })
-  } catch (error) {
-    console.log("Failed, trying to create directory first")
-    await mkdir("./data")
-    await appendFile("./data/reports.txt", reportString, { encoding: "utf-8" })
-  }
+  // Read current stored data
+  const currentReportsRaw = await readFile(reportsPath)
+  const currentReports = JSON.parse(currentReportsRaw)
+
+  // Create new data set
+  const newReports = [...currentReports, newReport]
+  const reportString = JSON.stringify(newReports)
+
+  // Write to file
+  await writeFile(reportsPath, reportString, { encoding: "utf-8" })
 }
 
 async function loadReports() {}
@@ -100,6 +118,7 @@ const server = createServer((request, response) => {
 })
 
 // Start serveren
+await setupEnvironment()
 server.listen(3000, "0.0.0.0", () => {
   console.log("Server listning on http://localhost:3000")
 })
