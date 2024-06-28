@@ -5,7 +5,7 @@ function getRandomNumber(min, max) {
   return ((Math.random() * range) + min)
 }
 
-function logTemperature() {
+async function logTemperature() {
   const report = {
     sensorId: 0,
     measurementDate: new Date().toISOString(),
@@ -15,10 +15,14 @@ function logTemperature() {
   console.log("Logging new report")
   console.log(report)
   
-  fetch(serverAddress, {
-    method: "POST",
-    body: JSON.stringify(report)
-  })
+  try {
+    await fetch(serverAddress, {
+      method: "POST",
+      body: JSON.stringify(report)
+    })
+  } catch (error) {
+    console.log("Failed to fetch")
+  }
 }
 
 setInterval(logTemperature, 5 * 1000)
