@@ -21,7 +21,7 @@ async function logTemperature() {
       body: JSON.stringify(report)
     })
   } catch (error) {
-    console.log("Failed to fetch")
+    console.log("Failed to post report to server")
   }
 }
 
