@@ -14,29 +14,32 @@
 
 async function getLatestReport() {
   // Hent data
-  const response = await fetch("http://localhost:3000/reports")
-
-  /**
-   * @type {Array<WeatherReport>}
-   */
-  const weatherReports = await response.json()
-  const lastWeatherReport = weatherReports[weatherReports.length - 1]
+  try {
+    const response = await fetch("http://localhost:3000/reports")
+    /**
+     * @type {Array<WeatherReport>}
+     */
+    const weatherReports = await response.json()
+    const lastWeatherReport = weatherReports[weatherReports.length - 1]
+    
+    // Bruk dataen til å oppdatere html (Dokumentet DOMet)
+    const temperatureElement = document.getElementById("temperature")
+    temperatureElement.textContent = lastWeatherReport.temperature
   
-  // Bruk dataen til å oppdatere html (Dokumentet DOMet)
-  const temperatureElement = document.getElementById("temperature")
-  temperatureElement.textContent = lastWeatherReport.temperature
-
-  const timestampElement = document.getElementById("time")
-  timestampElement.textContent = lastWeatherReport.reportDate
-
-  // Legg til nye elementer i tablet vårt
-  const tableElement = document.getElementById("table-weather-reports")
-  // Fjern all underelemnter (children)
-  tableElement.innerHTML = ""
-
-  for (const report of weatherReports) {
-    const newElement = createNewTableEntry(report)
-    tableElement.append(newElement)
+    const timestampElement = document.getElementById("time")
+    timestampElement.textContent = lastWeatherReport.reportDate
+  
+    // Legg til nye elementer i tablet vårt
+    const tableElement = document.getElementById("table-weather-reports")
+    // Fjern all underelemnter (children)
+    tableElement.innerHTML = ""
+  
+    for (const report of weatherReports) {
+      const newElement = createNewTableEntry(report)
+      tableElement.append(newElement)
+    }
+  } catch (error) {
+    console.log("Failed to contact server")
   }
 }
 
