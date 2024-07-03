@@ -1,6 +1,8 @@
-import { ServerResponse, IncomingMessage, createServer } from 'node:http'
+import { createServer } from 'node:http'
 import { writeFile, readFile, mkdir, } from 'node:fs/promises'
-import { getAllReports, registerNewMeasurment, reportsPath} from './handlers/reportsHandler.js'
+import { getAllReports, registerNewMeasurment, reportsPath } from './handlers/reportsHandler.js'
+import { logger } from './middlewares/logger.js'
+import { setCors } from './middlewares/setCors.js'
 
 // Lifecycle Initialization
 async function setupEnvironment() {
@@ -17,25 +19,6 @@ async function setupEnvironment() {
   
       await writeFile(reportsPath, JSON.stringify([]))
     }
-}
-
-// Cross cutting Middleware
-/**
- * @param {IncomingMessage} request 
- */
-function logger(request) {
-  const structuredLog = {
-    type: "info",
-    path: request.url,
-    method: request.method,
-    timestamp: new Date().toISOString(),
-  }
-
-  console.log(structuredLog)
-}
-
-function setCors(response) {
-  response.setHeader("Access-Control-Allow-Origin", '*')
 }
 
 // Main Program Loop
