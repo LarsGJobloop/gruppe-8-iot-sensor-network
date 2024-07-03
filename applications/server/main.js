@@ -1,9 +1,8 @@
 import { ServerResponse, IncomingMessage, createServer } from 'node:http'
 import { writeFile, readFile, mkdir, } from 'node:fs/promises'
+import { getAllReports, registerNewMeasurment, reportsPath} from './handlers/reportsHandler.js'
 
-let reportId = 0
-const reportsPath = "/app/data/reports.json"
-
+// Lifecycle Initialization
 async function setupEnvironment() {
     // Create files and directories if they don't exists
     try {
@@ -20,58 +19,7 @@ async function setupEnvironment() {
     }
 }
 
-// IO (InputOutput) Function
-async function appendReport(newReport) {
-  // Read current stored data
-  const currentReportsRaw = await readFile(reportsPath)
-  const currentReports = JSON.parse(currentReportsRaw)
-
-  // Create new data set
-  const newReports = [...currentReports, newReport]
-  const reportString = JSON.stringify(newReports)
-
-  // Write to file
-  await writeFile(reportsPath, reportString, { encoding: "utf-8" })
-}
-
-async function loadReports() {
-  const data = await readFile(reportsPath)
-  return data
-}
-
-/**
- * @param {IncomingMessage} request 
- * @param {ServerResponse<IncomingMessage> & {
- *    req: IncomingMessage;
- * }} response 
- */
-async function getAllReports(request, response) {
-  // Convert to network format
-  const data = await loadReports()
-  
-  // Send the resulting package
-  response.end(data)
-}
-
-function registerNewMeasurment(request, response) {
-  let data = ""
-
-  request.on("data", (chunk) => {data = data + chunk})
-
-  request.on("end", () => {
-    const obj = JSON.parse(data)
-
-    const newReport = {
-      reportId: reportId++,
-      reportDate: new Date().toISOString(),
-      temperature: obj.temperature,
-    }
-
-    appendReport(newReport)
-    response.end("Report registered\n")
-  })
-}
-
+// Cross cutting Middleware
 /**
  * @param {IncomingMessage} request 
  */
@@ -90,7 +38,7 @@ function setCors(response) {
   response.setHeader("Access-Control-Allow-Origin", '*')
 }
 
-// Create a new server
+// Main Program Loop
 const server = createServer((request, response) => {
   // Middleware
   logger(request)
@@ -118,13 +66,15 @@ const server = createServer((request, response) => {
   }
 })
 
-// Start serveren
+// Lifecycle definition
 await setupEnvironment()
+
+// Lifecycle start the server
 server.listen(3000, "0.0.0.0", () => {
   console.log("Server listning on http://localhost:3000")
 })
 
-// Lytt etter avslutnings meldinger
+// Lifecycle shutdown
 process.addListener("SIGTERM", () => {
   process.exit()
 })
