@@ -21,7 +21,6 @@ async function setupEnvironment() {
 }
 
 // IO (InputOutput) Function
-const reports = []
 async function appendReport(newReport) {
   // Read current stored data
   const currentReportsRaw = await readFile(reportsPath)
@@ -35,7 +34,10 @@ async function appendReport(newReport) {
   await writeFile(reportsPath, reportString, { encoding: "utf-8" })
 }
 
-async function loadReports() {}
+async function loadReports() {
+  const data = await readFile(reportsPath)
+  return data
+}
 
 /**
  * @param {IncomingMessage} request 
@@ -43,9 +45,9 @@ async function loadReports() {}
  *    req: IncomingMessage;
  * }} response 
  */
-function getAllReports(request, response) {
+async function getAllReports(request, response) {
   // Convert to network format
-  const data = JSON.stringify(reports)
+  const data = await loadReports()
   
   // Send the resulting package
   response.end(data)
@@ -66,7 +68,6 @@ function registerNewMeasurment(request, response) {
     }
 
     appendReport(newReport)
-    reports.push(newReport)
     response.end("Report registered\n")
   })
 }
