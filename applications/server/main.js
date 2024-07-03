@@ -2,7 +2,7 @@ import { ServerResponse, IncomingMessage, createServer } from 'node:http'
 import { writeFile, readFile, mkdir, } from 'node:fs/promises'
 
 let reportId = 0
-const reportsPath = "./data/reports.json"
+const reportsPath = "/app/data/reports.json"
 
 async function setupEnvironment() {
     // Create files and directories if they don't exists
